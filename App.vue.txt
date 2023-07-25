@@ -1,0 +1,233 @@
+<script setup>
+import { ref } from 'vue'
+
+const msg = ref("Hello World")
+const rawHtml = ref("You See Me?")
+const disabled = ref(false)
+
+function warnDisabled() {
+  disabled.value = true
+  setTimeout(() => {
+    disabled.value = false
+  }, 1300)
+}
+
+const x = ref(0)
+function onMousemove(e) {
+  x.value = e.clientX
+}
+
+let number = 1
+let data = [
+  {nama: 'Jerry', kelas: 'XII', jurusan: 'RPL'},
+  {nama: 'Dandan', kelas: 'XII', jurusan: 'TKRO'},
+  {nama: 'Bodat', kelas: 'XII', jurusan: 'TBSM'}
+]
+
+</script>
+
+<template>
+    <center>
+    <div>
+        <h1>{{ msg }}</h1>
+        <p><span v-html="rawHtml"></span></p>
+        <p><a v-on:[eventName]="doSomething" style="color: red;">Jerry Satrio Wibowo</a></p>
+        <a v-bind:[attributeName]="url" style="color: red;">XI RPL 2</a>
+        <form @submit.prevent="onSubmit">Rekayasa Perangkat Lunak</form>
+
+        <div>Jenis Kelamin :</div>
+        <input type="radio" value="Laki-Laki" v-model="picked">
+        <label for="laki-laki">Laki-Laki</label>
+        <input type="radio" value="Perempuan" v-model="picked">
+        <label for="perempuan">Perempuan</label>
+
+        <p><input type="checkbox" id="checkbox" v-model="checked" /></p>
+        <label for="checkbox">{{ checked }}</label>
+
+        <p><input v-email="message" placeholder="Email"></p>
+        <p><input v-password="message" placeholder="Password"></p>
+
+        <br><p><textarea v-on="message" placeholder="Saran Dan Masukan"></textarea></p>
+        
+        <p><button :disabled="isButtonDisabled" style="background-color: green;">Kirim</button></p>
+
+        <div :class="{ shake: disabled }">
+        <button @click="warnDisabled">Tekan</button>
+        <span v-if="disabled">Ini Tombol Disable</span>
+    </div>
+
+    <br><div @mousemove="onMousemove" :style="{ backgroundColor: `hsl(${x}, 80%, 50%)` }" class="movearea">
+    <p>Pindahin Cursor ...</p>
+    <p>x : {{ x }}</p>
+        </div>
+    </div>
+
+    <br><table border="3">
+    <tr>
+      <th>NO</th>
+      <th>Nama</th>
+      <th>Kelas</th>
+      <th>Jurusan</th>
+    </tr>
+    <tr v-for="siswa in data">
+    <td>{{ number++ }}</td>
+    <td>{{ siswa.nama }}</td>
+    <td>{{ siswa.kelas }}</td>
+    <td>{{ siswa.jurusan }}</td>
+  </tr>
+    </table>
+  </center>
+</template>
+
+document.getElementById('input').innerHTML += ("<br>Nama: " + this.kontak.nama ) + ("<br>Email: " + this.kontak.email);
+        
+<template>
+  <div>
+    <h2>Formulir</h2>
+    <form @submit.prevent="submitForm">
+    <label for="">Nama</label>
+    <input class="{'is-invalid':isInValidName}"
+    type="text" name="name" v-model="kontak.name">
+    <div v-if="isInValidName" class="error-message">Nama Harus Di Isi!</div>
+    <br>
+    <label for="">Email</label>
+    <input class="{'is-invalid':isInValidEmail}"
+    type="text" name="email" v-model="kontak.email">
+    <div v-if="isInValidEmail" class="error-message">Email Harus Di Isi!</div>
+    <br>
+    <input type="submit" value="Simpan">
+    <div id="input"></div>
+  </form>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'MyComponent',
+  data() {
+    return {
+      kontak : 
+      { 
+        name:'',
+        email:''
+      },
+      showResult: ref(false),
+      name: ref(''),
+      email: ref('')
+    };
+  },
+  computed: {
+        isInValidName() {
+          return this.name.length < 1;
+        },
+        isInValidEmail() {
+          return this.email.length < 1;
+        }
+      },
+    methods: {
+      submitForm(){
+        document.getElementById('input').innerHTML += ("<br>Nama: " + this.kontak.name ) + ("<br>Email: " + this.kontak.email);
+        this.showResult = true;
+        this.isInvalidName = false;
+        this.isInvalidEmail = false
+        }
+      },
+    };
+</script>
+<style>
+.error-message {
+  color: red;
+  margin-top: 5px;
+}
+
+.is-invalid {
+  border-color: red;
+}
+</style>
+
+<template>
+  <div>
+    <h2>Formulir</h2>
+    <form @submit.prevent="submitForm">
+    <label for="">Nama</label>
+    <input type="text" name="nama" v-model="siswa.nama">
+    <br>
+    <label for="">Kelas</label>
+    <input type="text" name="kelas" v-model="siswa.kelas">
+    <br>
+    <label for="">Alamat</label>
+    <input type="text" name="alamat" v-model="siswa.alamat">
+    <br>
+    <label for="">Nilai Mtk</label>
+    <input type="number" name="mtk" v-model="siswa.mtk">
+    <br>
+    <label for="">Nilai Bhs Indo</label>
+    <input type="number" name="indo" v-model="siswa.indo">
+    <br>
+    <label for="">Nilai Ipa</label>
+    <input type="number" name="ipa" v-model="siswa.ipa">
+    <br>
+    <button type="submit">Simpan</button>
+  </form>
+  <div v-if="showResult">
+    nama       : {{ name }}<br>
+    kelas      : {{ kelas }}<br>
+    alamat     : {{ alamat }}<br>
+    nilai mtk  : {{ mtk }}<br>
+    nilai indo : {{ indo }}<br>
+    nilai ipa  : {{ ipa }}<br>
+    Total nilai: {{ total }}<br>
+    Keterangan : {{ keterangan }}
+  </div>
+  </div>
+</template>
+<script>
+import { ref } from 'vue';
+
+export default {
+  name: 'MyComponent',
+  data() {
+    return {
+      siswa : { 
+        nama:'',
+        kelas:'',
+        alamat:'',
+        mtk:'',
+        indo:'',
+        ipa:''
+      },
+      showResult: ref(false),
+      name: ref(''),
+      kelas: ref(''),
+      alamat: ref(''),
+      mtk: ref(''),
+      indo: ref(''),
+      ipa: ref(''),
+      total: 0,
+      keterangan: ref('')
+    }
+  },
+    methods: {
+      submitForm(){
+        this.name = this.siswa.nama,
+        this.kelas = this.siswa.kelas,
+        this.alamat = this.siswa.alamat,
+        this.mtk = this.siswa.mtk,
+        this.indo = this.siswa.indo,
+        this.ipa = this.siswa.ipa,
+        this.total = parseInt(this.siswa.mtk) + parseInt(this.siswa.indo) + parseInt(this.siswa.ipa)
+        if(this.total > 240) {
+          this.keterangan = 'Lulus'
+        } else {
+          this.keterangan = 'Remedial'
+        }
+        this.showResult = true
+        }
+      },
+    };
+</script>
+<style>
+h2{
+  color: blue;
+}
+</style>
